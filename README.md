@@ -24,7 +24,7 @@ sudo pacman -S git
 
 2. Clone this repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/DanielCoffey1/arch-dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
