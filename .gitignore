@@ -1,66 +1,47 @@
-# Sensitive files
-*.key
-*.pem
-*.p12
-*.pfx
-*password*
-*secret*
-*token*
-.env
-.env.*
-config/pulse/cookie
+# Ignore sensitive data
+**/credentials.json
+**/secrets.json
+**/*.key
+**/*.pem
 
-# Cache and temporary files
-*.cache
-*.tmp
-*.log
+# Ignore cache and temporary files
+**/.cache/
+**/Cache/
+**/cache/
+**/__pycache__/
+*.pyc
+*.swp
+*.swo
 *~
-.DS_Store
 
-# Specific config directories with sensitive data
-config/1Password/
-config/obsidian/
-config/Signal/
-config/Typora/
+# Ignore logs
+*.log
 
-# Browser profiles and cache
-config/chromium/
-config/mozilla/
+# Ignore local database files
+*.sqlite
+*.db
 
-# Application data and cache
-config/*/Cache/
-config/*/cache/
-config/*/CachedData/
-config/*/GPUCache/
-config/**/Cookies
-config/**/History
-config/**/Sessions
-config/**/cache/
-config/**/*cache*
-config/**/*.db
-config/**/*.db-shm
-config/**/*.db-wal
-config/**/*.db-journal
+# Chromium/Browser specific
+.config/chromium/
+.config/google-chrome/
 
-# Runtime data
-config/ibus/bus/
-config/go/telemetry/
-config/session/
-config/libaccounts-glib/
+# Ignore history and state files
+.config/**/history
+.config/**/History
+.config/**/sessions/
+.config/**/Session Storage/
 
-# Backup files and old configs
-*.backup
-*.bak
-*.bak.*
-*.old
+# Application specific ignores
+.config/dconf/
+.config/pulse/
+.config/fcitx/
+.config/fcitx5/*.conf
+.config/session/
 
-# Git credential helper
-.git-credentials
+# Git specific
+.config/gh/hosts.yml
 
-# SSH keys
-*.pub
-id_*
-
-# GPG keys
-*.gpg
-*.asc
+# Build artifacts and node modules
+node_modules/
+dist/
+build/

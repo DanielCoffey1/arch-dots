@@ -1,0 +1,51 @@
+[env]
+TERM = "xterm-256color"
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+size = 9
+
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
+
+[keyboard]
+bindings = [
+{ key = "Insert", mods = "Shift", action = "Paste" },
+{ key = "Insert", mods = "Control", action = "Copy" }
+]
+
+# Pywal colors - generated from wallpaper
+[colors]
+[colors.primary]
+background = '#010206'
+foreground = '#d3d9e9'
+
+# Normal colors
+[colors.normal]
+black = '#010206'
+red = '#5A7097'
+green = '#8A6F87'
+yellow = '#7388AF'
+blue = '#7493C7'
+magenta = '#8D97B5'
+cyan = '#9AABD0'
+white = '#d3d9e9'
+
+# Bright colors
+[colors.bright]
+black = '#9397a3'
+red = '#5A7097'
+green = '#8A6F87'
+yellow = '#7388AF'
+blue = '#7493C7'
+magenta = '#8D97B5'
+cyan = '#9AABD0'
+white = '#d3d9e9'
+
+[colors.selection]
+background = '#7493C7'
+foreground = '#d3d9e9'

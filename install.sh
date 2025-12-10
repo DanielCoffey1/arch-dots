@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Dotfiles installation script for Arch Linux
-# This script will install all packages and restore configurations
+# Arch Linux Dotfiles Installation Script
+# This script will install packages and deploy dotfiles
 
 set -e
 
@@ -9,169 +9,169 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}  Dotfiles Installation Script${NC}"
-echo -e "${GREEN}========================================${NC}"
-echo ""
+# Functions
+print_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
 
 # Check if running on Arch Linux
 if [ ! -f /etc/arch-release ]; then
-    echo -e "${RED}Error: This script is designed for Arch Linux only.${NC}"
+    print_error "This script is designed for Arch Linux only!"
     exit 1
 fi
 
-# Get the directory where this script is located
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$DOTFILES_DIR"
+print_info "Starting Arch Linux dotfiles installation..."
 
-echo -e "${YELLOW}Dotfiles directory: $DOTFILES_DIR${NC}"
+# Install yay if not present
+if ! command -v yay &> /dev/null; then
+    print_info "Installing yay AUR helper..."
+    sudo pacman -S --needed --noconfirm git base-devel
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si --noconfirm
+    cd ~
+    print_success "yay installed successfully"
+else
+    print_success "yay is already installed"
+fi
+
+# Ask user what to install
 echo ""
+print_info "What would you like to install?"
+echo "1) Only official repository packages"
+echo "2) Only AUR packages"
+echo "3) All packages (official + AUR)"
+echo "4) Skip package installation"
+read -p "Enter your choice (1-4): " install_choice
 
-# Function to install yay if not present
-install_yay() {
-    if ! command -v yay &> /dev/null; then
-        echo -e "${YELLOW}Installing yay (AUR helper)...${NC}"
-        sudo pacman -S --needed --noconfirm git base-devel
-        cd /tmp
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si --noconfirm
-        cd "$DOTFILES_DIR"
-        echo -e "${GREEN}yay installed successfully!${NC}"
-    else
-        echo -e "${GREEN}yay is already installed.${NC}"
-    fi
-}
+case $install_choice in
+    1)
+        print_info "Installing official repository packages..."
+        sudo pacman -S --needed - < packages/officiallist.txt
+        print_success "Official packages installed"
+        ;;
+    2)
+        print_info "Installing AUR packages..."
+        yay -S --needed - < packages/aurlist.txt
+        print_success "AUR packages installed"
+        ;;
+    3)
+        print_info "Installing all packages (this may take a while)..."
+        sudo pacman -S --needed - < packages/officiallist.txt
+        yay -S --needed - < packages/aurlist.txt
+        print_success "All packages installed"
+        ;;
+    4)
+        print_warning "Skipping package installation"
+        ;;
+    *)
+        print_error "Invalid choice. Exiting."
+        exit 1
+        ;;
+esac
 
-# Install official packages
-install_official_packages() {
-    echo ""
-    echo -e "${YELLOW}Installing official packages...${NC}"
-    if [ -f pkglist.txt ]; then
-        sudo pacman -S --needed --noconfirm - < pkglist.txt
-        echo -e "${GREEN}Official packages installed!${NC}"
-    else
-        echo -e "${RED}pkglist.txt not found!${NC}"
-    fi
-}
+# Deploy dotfiles
+echo ""
+print_info "Deploying dotfiles..."
 
-# Install AUR packages
-install_aur_packages() {
-    echo ""
-    echo -e "${YELLOW}Installing AUR packages...${NC}"
-    if [ -f aur-pkglist.txt ]; then
-        yay -S --needed --noconfirm - < aur-pkglist.txt
-        echo -e "${GREEN}AUR packages installed!${NC}"
-    else
-        echo -e "${RED}aur-pkglist.txt not found!${NC}"
-    fi
-}
+# Backup existing configs
+BACKUP_DIR=~/dotfiles_backup_$(date +%Y%m%d_%H%M%S)
+print_info "Creating backup of existing configs at $BACKUP_DIR"
+mkdir -p "$BACKUP_DIR/.config"
 
-# Create symlinks for config files
-setup_symlinks() {
-    echo ""
-    echo -e "${YELLOW}Setting up configuration symlinks...${NC}"
+# List of config directories to deploy
+config_dirs=(
+    "hypr"
+    "waybar"
+    "kitty"
+    "alacritty"
+    "ghostty"
+    "nvim"
+    "rofi"
+    "mako"
+    "dunst"
+    "walker"
+    "wal"
+    "btop"
+    "fastfetch"
+    "lazygit"
+    "mise"
+    "swayosd"
+    "uwsm"
+)
 
-    # Backup existing configs
-    if [ -d ~/.config ]; then
-        echo -e "${YELLOW}Backing up existing .config directory...${NC}"
-        mv ~/.config ~/.config.backup.$(date +%Y%m%d_%H%M%S)
-    fi
-
-    # Create symlink for .config
-    if [ -d "$DOTFILES_DIR/config" ]; then
-        ln -sf "$DOTFILES_DIR/config" ~/.config
-        echo -e "${GREEN}Symlinked .config${NC}"
-    fi
-
-    # Symlink bashrc
-    if [ -f "$DOTFILES_DIR/bashrc" ]; then
-        ln -sf "$DOTFILES_DIR/bashrc" ~/.bashrc
-        echo -e "${GREEN}Symlinked .bashrc${NC}"
-    fi
-
-    # Symlink bash_profile
-    if [ -f "$DOTFILES_DIR/bash_profile" ]; then
-        ln -sf "$DOTFILES_DIR/bash_profile" ~/.bash_profile
-        echo -e "${GREEN}Symlinked .bash_profile${NC}"
-    fi
-
-    # Symlink gtkrc-2.0
-    if [ -f "$DOTFILES_DIR/gtkrc-2.0" ]; then
-        ln -sf "$DOTFILES_DIR/gtkrc-2.0" ~/.gtkrc-2.0
-        echo -e "${GREEN}Symlinked .gtkrc-2.0${NC}"
+# Backup and copy config directories
+for dir in "${config_dirs[@]}"; do
+    if [ -d "$HOME/.config/$dir" ]; then
+        print_info "Backing up existing ~/.config/$dir"
+        cp -r "$HOME/.config/$dir" "$BACKUP_DIR/.config/"
     fi
 
-    # Copy wallpapers
-    if [ -d "$DOTFILES_DIR/wallpapers" ]; then
-        echo -e "${YELLOW}Copying wallpapers...${NC}"
-        mkdir -p ~/Pictures
-        cp -r "$DOTFILES_DIR/wallpapers"/* ~/Pictures/
-        echo -e "${GREEN}Wallpapers copied to ~/Pictures/${NC}"
+    if [ -d ".config/$dir" ]; then
+        print_info "Deploying $dir config"
+        cp -r ".config/$dir" "$HOME/.config/"
+    fi
+done
+
+# Handle individual config files
+if [ -f ".config/starship.toml" ]; then
+    [ -f "$HOME/.config/starship.toml" ] && cp "$HOME/.config/starship.toml" "$BACKUP_DIR/.config/"
+    cp ".config/starship.toml" "$HOME/.config/"
+    print_info "Deployed starship.toml"
+fi
+
+# Deploy shell configs
+shell_files=(".bashrc" ".bash_profile")
+for file in "${shell_files[@]}"; do
+    if [ -f "$file" ]; then
+        [ -f "$HOME/$file" ] && cp "$HOME/$file" "$BACKUP_DIR/"
+        cp "$file" "$HOME/"
+        print_info "Deployed $file"
+    fi
+done
+
+print_success "Dotfiles deployed successfully!"
+print_info "Backup of old configs saved to: $BACKUP_DIR"
+
+# Enable systemd services (if needed)
+echo ""
+read -p "Would you like to enable common systemd services? (y/n): " enable_services
+if [[ $enable_services == "y" || $enable_services == "Y" ]]; then
+    print_info "Enabling systemd services..."
+
+    # Enable Bluetooth
+    sudo systemctl enable --now bluetooth.service
+
+    # Enable SDDM (if installed)
+    if command -v sddm &> /dev/null; then
+        sudo systemctl enable sddm.service
     fi
 
-    echo -e "${GREEN}Symlinks created successfully!${NC}"
-}
+    print_success "Services enabled"
+fi
 
-# Enable systemd services
-enable_systemd_services() {
-    echo ""
-    echo -e "${YELLOW}Enabling systemd services...${NC}"
-
-    # User services
-    systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber.service || true
-
-    echo -e "${GREEN}Systemd services enabled!${NC}"
-}
-
-# Main installation flow
-main() {
-    echo -e "${YELLOW}Choose installation option:${NC}"
-    echo "1) Full installation (packages + configs)"
-    echo "2) Install packages only"
-    echo "3) Setup configs only (symlinks)"
-    echo "4) Exit"
-    echo ""
-    read -p "Enter your choice [1-4]: " choice
-
-    case $choice in
-        1)
-            echo -e "${GREEN}Starting full installation...${NC}"
-            install_yay
-            install_official_packages
-            install_aur_packages
-            setup_symlinks
-            enable_systemd_services
-            ;;
-        2)
-            echo -e "${GREEN}Installing packages only...${NC}"
-            install_yay
-            install_official_packages
-            install_aur_packages
-            ;;
-        3)
-            echo -e "${GREEN}Setting up configs only...${NC}"
-            setup_symlinks
-            enable_systemd_services
-            ;;
-        4)
-            echo -e "${YELLOW}Exiting...${NC}"
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid choice!${NC}"
-            exit 1
-            ;;
-    esac
-
-    echo ""
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${GREEN}  Installation complete!${NC}"
-    echo -e "${GREEN}========================================${NC}"
-    echo ""
-    echo -e "${YELLOW}Please log out and log back in for all changes to take effect.${NC}"
-}
-
-main
+echo ""
+print_success "Installation complete!"
+print_info "You may need to:"
+echo "  - Reboot your system"
+echo "  - Re-login to apply shell changes"
+echo "  - Configure NVIDIA drivers if applicable"
+echo "  - Set up your user-specific configurations"
+echo ""
+print_info "Enjoy your Arch + Hyprland setup!"

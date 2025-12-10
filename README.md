@@ -1,140 +1,204 @@
-# Dotfiles
+# Arch Linux + Hyprland Dotfiles
 
-My personal Arch Linux configuration files and setup automation.
+This repository contains my complete Arch Linux configuration with Hyprland window manager and all associated dotfiles.
 
-## Features
+## System Overview
 
-- Hyprland window manager configuration
-- Waybar status bar
-- Terminal configs (Alacritty, Kitty, Ghostty)
-- Shell configuration (Bash with Starship prompt)
-- Neovim configuration
-- Application configs and themes
-- Complete package lists (official repos + AUR)
-- Automated installation script
+- **Distribution**: Arch Linux
+- **Window Manager**: Hyprland
+- **Status Bar**: Waybar
+- **Terminal**: Kitty, Alacritty, Ghostty
+- **Shell**: Bash with Starship prompt
+- **Application Launcher**: Rofi, Walker
+- **Notification Daemon**: Mako, Dunst
+- **Lock Screen**: Hyprlock
+- **Idle Manager**: Hypridle
+- **Editor**: Neovim
+- **Theme Manager**: pywal
+- **Display Manager**: SDDM
+- **GPU**: NVIDIA (open-dkms)
 
-## Quick Start
+## Repository Structure
 
-### Fresh Arch Linux Installation
-
-1. Install Git:
-```bash
-sudo pacman -S git
+```
+dotfiles/
+├── .config/           # Application configurations
+│   ├── hypr/         # Hyprland configuration
+│   ├── waybar/       # Waybar status bar
+│   ├── kitty/        # Kitty terminal
+│   ├── alacritty/    # Alacritty terminal
+│   ├── ghostty/      # Ghostty terminal
+│   ├── nvim/         # Neovim configuration
+│   ├── rofi/         # Rofi launcher
+│   ├── mako/         # Mako notifications
+│   ├── dunst/        # Dunst notifications
+│   ├── walker/       # Walker launcher
+│   ├── wal/          # pywal theming
+│   ├── btop/         # System monitor
+│   ├── fastfetch/    # System info
+│   ├── lazygit/      # Git TUI
+│   ├── mise/         # Runtime manager
+│   ├── swayosd/      # OSD daemon
+│   ├── uwsm/         # Window manager session
+│   └── starship.toml # Starship prompt
+├── packages/         # Package lists
+│   ├── pkglist.txt      # All explicitly installed packages
+│   ├── officiallist.txt # Official repository packages
+│   └── aurlist.txt      # AUR packages
+├── .bashrc           # Bash configuration
+├── .bash_profile     # Bash profile
+├── install.sh        # Installation script
+└── README.md         # This file
 ```
 
-2. Clone this repository:
+## Installation
+
+### Prerequisites
+
+- A fresh or existing Arch Linux installation
+- Internet connection
+- `git` installed (`sudo pacman -S git`)
+
+### Quick Install
+
+1. Clone this repository:
 ```bash
-git clone https://github.com/DanielCoffey1/arch-dotfiles.git ~/dotfiles
+git clone <your-repo-url> ~/dotfiles
 cd ~/dotfiles
 ```
 
-3. Run the installation script:
+2. Run the installation script:
 ```bash
-chmod +x install.sh
 ./install.sh
 ```
 
-4. Choose installation option:
-   - **Option 1**: Full installation (packages + configs)
-   - **Option 2**: Install packages only
-   - **Option 3**: Setup configs only (symlinks)
+3. Follow the prompts to:
+   - Install packages (choose official, AUR, or all)
+   - Deploy dotfiles (automatically backs up existing configs)
+   - Enable systemd services
 
-5. Log out and log back in for all changes to take effect.
+### Manual Installation
 
-## What Gets Installed
+If you prefer to install manually:
 
-### Window Manager & Desktop
-- Hyprland (Wayland compositor)
-- Waybar (status bar)
-- SDDM (display manager)
-- Plymouth (boot splash)
-- Plasma Desktop components
+#### Install Packages
 
-### Applications
-- Browsers: Firefox, Chromium
-- Terminals: Alacritty, Kitty, Konsole, Ghostty
-- Editors: Neovim, Kate
-- File managers: Dolphin, Nautilus
-- Media: MPV, OBS Studio, Kdenlive
-- Office: LibreOffice
-- Communication: Signal Desktop, Spotify
-- Utilities: btop, fastfetch, and many more
+```bash
+# Install official repository packages
+sudo pacman -S --needed - < packages/officiallist.txt
 
-### Development Tools
-- Docker & Docker Compose
-- Git, GitHub CLI
-- Programming languages: Rust, Ruby, Python, Node.js (via mise)
-- Neovim with full configuration
-- Lazy tools: lazygit, lazydocker
+# Install AUR packages (requires yay)
+yay -S --needed - < packages/aurlist.txt
+```
 
-### System Utilities
-- Audio: PipeWire, WirePlumber
-- Network: NetworkManager, IWD
-- Bluetooth: BlueDevil
-- Power management: PowerDevil
-- Backup: Snapper (btrfs snapshots)
+#### Deploy Dotfiles
 
-## Configuration Files
+```bash
+# Backup your existing configs first!
+cp -r ~/.config ~/.config.backup
 
-All configuration files are symlinked from this repository to their proper locations:
+# Copy configurations
+cp -r .config/* ~/.config/
+cp .bashrc ~/
+cp .bash_profile ~/
+```
 
-- `config/` → `~/.config/`
-- `bashrc` → `~/.bashrc`
-- `bash_profile` → `~/.bash_profile`
-- `gtkrc-2.0` → `~/.gtkrc-2.0`
-- `wallpapers/` → copied to `~/Pictures/`
+## Post-Installation
 
-## Themes and Appearance
+### Essential Steps
 
-- **GTK Theme**: Breeze (installed via package list)
-- **Icon Theme**: Breeze Dark (installed via package list)
-- **KDE Theme**: Breeze Dark
-- **Wallpapers**: Stored in `wallpapers/` directory, copied to `~/Pictures/` during installation
+1. **Reboot** or re-login to apply all changes
+2. **Configure NVIDIA** if you're using NVIDIA GPU
+3. **Enable services**:
+   ```bash
+   sudo systemctl enable --now bluetooth
+   sudo systemctl enable sddm
+   ```
 
-## Package Lists
+### Hyprland First Launch
 
-- `pkglist.txt`: Official repository packages
-- `aur-pkglist.txt`: AUR packages
+- Press `Super + Return` to open a terminal
+- Press `Super + D` or `Super + R` to open application launcher
+- Press `Super + Q` to close windows
+- Press `Super + M` to exit Hyprland
 
-## Updating This Repository
+### Customization
 
-To update the dotfiles repository with your latest configs:
+- **Hyprland**: Edit `~/.config/hypr/hyprland.conf`
+- **Waybar**: Edit `~/.config/waybar/config`
+- **Theme**: Run `wal -i /path/to/wallpaper` to generate color scheme
+- **Keybindings**: Check `~/.config/hypr/hyprland.conf`
+
+## Key Features
+
+- **pywal integration**: Automatic color scheme generation from wallpapers
+- **Multiple terminal options**: Kitty, Alacritty, Ghostty
+- **GPU screen recording**: gpu-screen-recorder configured
+- **Development tools**: Neovim, mise, lazygit, docker
+- **System monitoring**: btop, plasma-systemmonitor
+- **File management**: Dolphin, Nautilus
+
+## Package Management
+
+### Update All Packages
+
+```bash
+yay -Syu
+```
+
+### Add New Package to List
+
+After installing a new package, update the lists:
+```bash
+pacman -Qe | awk '{print $1}' > packages/pkglist.txt
+pacman -Qm | awk '{print $1}' > packages/aurlist.txt
+pacman -Qen | awk '{print $1}' > packages/officiallist.txt
+```
+
+## Troubleshooting
+
+### NVIDIA Issues
+
+If you experience issues with NVIDIA:
+- Check kernel modules: `lsmod | grep nvidia`
+- Rebuild initramfs: `sudo mkinitcpio -P`
+- Check Hyprland env vars in `~/.config/hypr/hyprland.conf`
+
+### Display Manager Not Starting
+
+```bash
+sudo systemctl status sddm
+sudo journalctl -u sddm
+```
+
+### Hyprland Won't Start
+
+Check logs:
+```bash
+cat /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log
+```
+
+## Backup
+
+This repository IS your backup. Keep it updated:
 
 ```bash
 cd ~/dotfiles
-
-# Copy latest configs
-cp -r ~/.config/* config/
-cp ~/.bashrc bashrc
-cp ~/.bash_profile bash_profile
-cp ~/.gtkrc-2.0 gtkrc-2.0
-
-# Copy wallpapers (if you added new ones)
-cp ~/Pictures/*.{jpg,png,jpeg,webp} wallpapers/ 2>/dev/null
-
+# Copy any changed configs
+cp ~/.bashrc .
+cp -r ~/.config/hypr .config/
 # Update package lists
-pacman -Qqe > pkglist.txt
-pacman -Qqm > aur-pkglist.txt
-
+pacman -Qe | awk '{print $1}' > packages/pkglist.txt
 # Commit and push
 git add .
 git commit -m "Update dotfiles"
 git push
 ```
 
-## Notes
+## Credits
 
-- Your existing `.config` directory will be backed up to `.config.backup.TIMESTAMP` before creating symlinks
-- The installation script requires sudo privileges for package installation
-- Some applications may require additional manual configuration after installation
-- Review the package lists before installation to customize what gets installed
-
-## Requirements
-
-- Fresh Arch Linux installation
-- Internet connection
-- sudo privileges
+Configuration inspired by the Arch and Hyprland communities.
 
 ## License
 
-Feel free to use and modify these dotfiles for your own setup!
+Feel free to use and modify these configurations for your own setup.
