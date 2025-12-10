@@ -63,7 +63,7 @@ dotfiles/
 
 1. Clone this repository:
 ```bash
-git clone <your-repo-url> ~/dotfiles
+git clone https://github.com/DanielCoffey1/arch-dots ~/dotfiles
 cd ~/dotfiles
 ```
 
