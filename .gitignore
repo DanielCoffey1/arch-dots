@@ -13,6 +13,9 @@
 *.swp
 *.swo
 *~
+*.bak
+*.bak.*
+*.backup
 
 # Ignore logs
 *.log
@@ -35,8 +38,9 @@
 .config/dconf/
 .config/pulse/
 .config/fcitx/
-.config/fcitx5/*.conf
+.config/fcitx5/conf/
 .config/session/
+.config/go/telemetry/
 
 # Git specific
 .config/gh/hosts.yml
