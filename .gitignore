@@ -41,9 +41,16 @@
 .config/fcitx5/conf/
 .config/session/
 .config/go/telemetry/
+.config/discord/
+.config/Cursor/
+.config/ibus/
+.config/systemd/
+.config/.dart-cli-completion/
+.config/tool_state
+.config/kactivitymanagerdrc
 
 # Git specific
-.config/gh/hosts.yml
+.config/gh/
 
 # Build artifacts and node modules
 node_modules/
