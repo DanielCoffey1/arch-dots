@@ -44,7 +44,6 @@
 .config/discord/
 .config/Cursor/
 .config/ibus/
-.config/systemd/
 .config/.dart-cli-completion/
 .config/tool_state
 .config/kactivitymanagerdrc
