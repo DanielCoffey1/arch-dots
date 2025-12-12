@@ -1,9 +1,4 @@
-1password-beta
-1password-cli
-aether
-blueman-git
 claude-code
-github-desktop
 google-chrome
 gpu-screen-recorder
 hyprshade
@@ -19,11 +14,11 @@ sabnzbd
 spotify
 ttf-ia-writer
 typora
+tzupdate
 ufw-docker
-wayfreeze-git
-webapp-manager
 xdg-terminal-exec
 xivlauncher
+xpadneo-dkms
 yaru-icon-theme
 yay
 yay-debug
