@@ -8,122 +8,13 @@ configuration {
     icon-theme: "Papirus";
 }
 
-* {
-    bg: #010206;
-    fg: #d3d9e9;
-    accent: #7493C7;
-    urgent: #5A7097;
-
-    background-color: @bg;
-    text-color: @fg;
-    border-color: @accent;
-}
+@import "~/.cache/wal/colors-rofi-dark.rasi"
 
 window {
-    background-color: @bg;
-    border: 2px;
-    border-color: @accent;
-    padding: 15px;
     width: 600px;
 }
 
-mainbox {
-    background-color: @bg;
-    children: [ inputbar, listview ];
-}
-
-inputbar {
-    background-color: @bg;
-    text-color: @fg;
-    padding: 8px;
-    margin: 0px 0px 10px 0px;
-    children: [ prompt, entry ];
-}
-
-prompt {
-    background-color: @accent;
-    text-color: @bg;
-    padding: 8px 12px;
-    margin: 0px 8px 0px 0px;
-    border-radius: 4px;
-}
-
-entry {
-    background-color: @bg;
-    text-color: @fg;
-    placeholder-color: #9397a3;
-    padding: 8px;
-}
-
-listview {
-    background-color: @bg;
-    margin: 0px;
-    spacing: 2px;
-    lines: 10;
-    scrollbar: false;
-}
-
-element {
-    background-color: @bg;
-    text-color: @fg;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-element.normal.normal {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.alternate.normal {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.selected.normal {
-    background-color: @accent;
-    text-color: @bg;
-}
-
-element.normal.active {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.alternate.active {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.selected.active {
-    background-color: @accent;
-    text-color: @bg;
-}
-
-element-text {
-    background-color: transparent;
-    text-color: inherit;
-}
-
 element-icon {
-    background-color: transparent;
-    text-color: inherit;
     size: 24px;
     margin: 0px 10px 0px 0px;
-}
-
-scrollbar {
-    background-color: @bg;
-    handle-color: @accent;
-    width: 4px;
-}
-
-message {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-textbox {
-    background-color: @bg;
-    text-color: @fg;
 }
